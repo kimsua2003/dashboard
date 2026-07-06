@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Minimal Dashboard</title>
     <style>
-        /* 기본 테마 세팅: 검정, 회색, 하양 위주 */
         :root {
             --bg-color: #121212;
             --card-bg: #1e1e1e;
@@ -30,7 +29,6 @@
             min-height: 100vh;
         }
 
-        /* 사이드바 디자인 */
         sidebar {
             width: 250px;
             background-color: #0a0a0a;
@@ -66,7 +64,6 @@
             color: var(--text-main);
         }
 
-        /* 메인 콘텐츠 영역 */
         main {
             flex: 1;
             padding: 2.5rem;
@@ -88,7 +85,6 @@
             font-size: 0.9rem;
         }
 
-        /* 그리드 레이아웃 (카드 배치) */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 11fr));
@@ -113,7 +109,6 @@
             color: var(--text-main);
         }
 
-        /* 입력창 및 버튼 공통 스타일 */
         input, textarea {
             width: 100%;
             background-color: #121212;
@@ -123,10 +118,6 @@
             border-radius: 4px;
             font-size: 0.9rem;
             outline: none;
-        }
-
-        input:focus, textarea:focus {
-            border-color: #555;
         }
 
         button {
@@ -144,7 +135,6 @@
             background-color: var(--accent-hover);
         }
 
-        /* 리스트 스타일 (계획, 저장소용) */
         .list-container {
             max-height: 200px;
             overflow-y: auto;
@@ -172,10 +162,8 @@
         }
         .list-item button:hover {
             color: #ff5555;
-            background: none;
         }
 
-        /* 계산기 전용 스타일 */
         .calc-inputs {
             display: flex;
             gap: 0.5rem;
@@ -186,6 +174,29 @@
             font-weight: bold;
             text-align: right;
         }
+
+        /* 마인드맵 스타일 추가 */
+        .mindmap-area {
+            background-color: #121212;
+            border: 1px dashed var(--border-color);
+            padding: 1rem;
+            border-radius: 4px;
+            min-height: 150px;
+        }
+        .mindmap-node {
+            background: #2a2a2a;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 5px;
+            font-size: 0.85rem;
+            border: 1px solid #444;
+        }
+        .mindmap-center {
+            background: #fff;
+            color: #000;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -195,7 +206,7 @@
         <nav>
             <ul>
                 <li><a href="#" class="active">대시보드</a></li>
-                <li><a href="#">마인드맵 (준비중)</a></li>
+                <li><a href="#">마인드맵 (활성화됨)</a></li>
                 <li><a href="#">계획/설정</a></li>
                 <li><a href="#">자료저장</a></li>
                 <li><a href="#">분석/계산</a></li>
@@ -206,23 +217,13 @@
     <main>
         <header>
             <h1 id="welcome-msg">안녕하세요. 오늘의 생각을 정리해보세요.</h1>
-            <p>미니멀 블랙 테마의 개인 맞춤형 공간입니다.</p>
+            <p>미니멀 블랙 테마의 개인 맞춤형 공간입니다. (V2 업데이트 완료)</p>
         </header>
 
         <div class="dashboard-grid">
             
-            <div class="card">
-                <h2>🎯 계획 및 목표 설정</h2>
+            <div class="card" style="grid-column: span 2;">
+                <h2>🧠 핵심 생각 마인드맵</h2>
                 <div style="display: flex; gap: 0.5rem;">
-                    <input type="text" id="todo-input" placeholder="오늘의 목표를 입력하세요...">
-                    <button onclick="addTodo()">추가</button>
-                </div>
-                <div class="list-container" id="todo-list">
-                    </div>
-            </div>
-
-            <div class="card">
-                <h2>📁 간단 자료 저장소</h2>
-                <textarea id="memo-input" rows="2" placeholder="저장할 링크나 아이디어를 적으세요..."></textarea>
-                <button onclick="addMemo()">메모 저장</button>
-                <div class="list-container" id="memo-list
+                    <input type="text" id="map-center-input" placeholder="중심 생각을 입력하세요 (예: 올해 목표)">
+                    <button onclick="setCenter
