@@ -3,199 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Minimal Dashboard</title>
+    <title>Beautiful Mindmap Dashboard</title>
     <style>
         :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --border-color: #2e2e2e;
-            --text-main: #ffffff;
-            --text-sub: #a0a0a0;
-            --accent-color: #ffffff;
-            --accent-hover: #e0e0e0;
+            --bg-color: #f8f9fa; /* 마인드맵 배경을 돋보이게 하기 위해 모던한 연그레이 격자 배경 채택 */
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+            --text-main: #212529;
+            --text-sub: #6c757d;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
+            background-image: radial-gradient(#e9ecef 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
             color: var(--text-main);
             display: flex;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
         }
 
         sidebar {
-            width: 250px;
-            background-color: #0a0a0a;
+            width: 260px;
+            background-color: #ffffff;
             border-right: 1px solid var(--border-color);
             padding: 2rem;
             display: flex;
             flex-direction: column;
             gap: 2rem;
+            z-index: 10;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.02);
         }
 
         sidebar .logo {
             font-size: 1.2rem;
-            font-weight: bold;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #000;
         }
 
         sidebar nav ul {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.8rem;
         }
 
         sidebar nav a {
             color: var(--text-sub);
             text-decoration: none;
             font-size: 0.95rem;
-            transition: color 0.2s;
+            font-weight: 500;
+            display: block;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
         }
 
-        sidebar nav a:hover, sidebar nav a.active {
-            color: var(--text-main);
+        sidebar nav a.active {
+            background-color: #f1f3f5;
+            color: #000000;
+            font-weight: 700;
         }
 
         main {
             flex: 1;
-            padding: 2.5rem;
-            overflow-y: auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
 
         header {
-            margin-bottom: 2.5rem;
+            margin-bottom: 1.5rem;
         }
 
         header h1 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
         }
 
-        header p {
-            color: var(--text-sub);
-            font-size: 0.9rem;
-        }
-
-        .dashboard-grid {
+        .dashboard-layout {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 11fr));
-            gap: 1.5rem;
+            grid-template-columns: 1fr;
+            flex: 1;
+            min-height: 0;
         }
 
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            min-height: 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
         }
 
         .card h2 {
             font-size: 1.1rem;
-            font-weight: 500;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 0.5rem;
-            color: var(--text-main);
+            font-weight: 600;
+            color: #000;
         }
 
-        input, textarea {
-            width: 100%;
-            background-color: #121212;
-            border: 1px solid var(--border-color);
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+            background: #f1f3f5;
+            padding: 0.5rem;
+            border-radius: 8px;
+            align-items: center;
+        }
+
+        input, select {
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
             color: var(--text-main);
-            padding: 0.75rem;
-            border-radius: 4px;
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
             font-size: 0.9rem;
             outline: none;
         }
 
         button {
-            background-color: var(--accent-color);
-            color: #000000;
+            background-color: #000000;
+            color: #ffffff;
             border: none;
-            padding: 0.75rem;
-            border-radius: 4px;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
         }
 
         button:hover {
-            background-color: var(--accent-hover);
+            background-color: #212529;
         }
 
-        .list-container {
-            max-height: 200px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+        /* 비주얼 마인드맵 컨테이너 */
+        .mindmap-wrapper {
+            position: relative;
+            flex: 1;
+            background-color: #fafbfc;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
         }
 
-        .list-item {
-            background-color: #1a1a1a;
-            padding: 0.75rem;
-            border-radius: 4px;
-            border-left: 3px solid #555;
+        #mindmap-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 이미지 스타일의 입동적인 노드들 */
+        .node {
+            position: absolute;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
             font-size: 0.9rem;
+            font-weight: bold;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            text-align: center;
+            min-width: 100px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* 레벨 0: 중심 (검은 원형) */
+        .node-lvl-0 {
+            background-color: #000000;
+            color: #ffffff;
+            border-radius: 50%;
+            width: 130px;
+            height: 130px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-        }
-
-        .list-item button {
-            background: none;
-            color: var(--text-sub);
-            padding: 0;
-            font-size: 0.8rem;
-        }
-        .list-item button:hover {
-            color: #ff5555;
-        }
-
-        .calc-inputs {
-            display: flex;
-            gap: 0.5rem;
-        }
-        .calc-result {
-            margin-top: 0.5rem;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-align: right;
-        }
-
-        /* 마인드맵 스타일 추가 */
-        .mindmap-area {
-            background-color: #121212;
-            border: 1px dashed var(--border-color);
+            justify-content: center;
+            font-size: 1.05rem;
             padding: 1rem;
-            border-radius: 4px;
-            min-height: 150px;
         }
-        .mindmap-node {
-            background: #2a2a2a;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            display: inline-block;
-            margin: 5px;
+
+        /* 레벨 1: 주요 카테고리 (알록달록 캡슐) */
+        .node-lvl-1 {
+            color: #ffffff;
+            border-radius: 24px;
+            font-size: 0.95rem;
+        }
+
+        /* 레벨 2: 하위 상세 항목 (연한 파스텔톤) */
+        .node-lvl-2 {
+            color: #212529;
+            border-radius: 18px;
             font-size: 0.85rem;
-            border: 1px solid #444;
-        }
-        .mindmap-center {
-            background: #fff;
-            color: #000;
-            font-weight: bold;
+            font-weight: 500;
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
         }
     </style>
 </head>
@@ -205,120 +218,192 @@
         <div class="logo">MND_DASH</div>
         <nav>
             <ul>
-                <li><a href="#" class="active">대시보드</a></li>
-                <li><a href="#">마인드맵 (활성화됨)</a></li>
-                <li><a href="#">계획/설정</a></li>
-                <li><a href="#">자료저장</a></li>
-                <li><a href="#">분석/계산</a></li>
+                <li><a href="#" class="active">비주얼 마인드맵</a></li>
+                <li><a href="#">생각 정리함</a></li>
+                <li><a href="#">설정</a></li>
             </ul>
         </nav>
     </sidebar>
 
     <main>
         <header>
-            <h1 id="welcome-msg">안녕하세요. 오늘의 생각을 정리해보세요.</h1>
-            <p>미니멀 블랙 테마의 개인 맞춤형 공간입니다. (V2 업데이트 완료)</p>
+            <h1>💡 아이디어 마인드맵 빌더</h1>
         </header>
 
-        <div class="dashboard-grid">
-            
-            <div class="card" style="grid-column: span 2;">
-                <h2>🧠 핵심 생각 마인드맵</h2>
-                <div style="display: flex; gap: 0.5rem;">
-                    <input type="text" id="map-center-input" placeholder="중심 생각을 입력하세요 (예: 올해 목표)">
-                    <button onclick="setCenterNode()">중심 설정</button>
-                    <input type="text" id="map-sub-input" placeholder="가지치기 생각 입력">
-                    <button onclick="addSubNode()">가지 추가</button>
-                </div>
-                <div class="mindmap-area" id="mindmap-container">
-                    <div class="mindmap-node mindmap-center">중심 생각을 먼저 입력하세요</div>
-                </div>
-            </div>
-
+        <div class="dashboard-layout">
             <div class="card">
-                <h2>🎯 계획 및 목표 설정</h2>
-                <div style="display: flex; gap: 0.5rem;">
-                    <input type="text" id="todo-input" placeholder="오늘의 목표를 입력하세요...">
-                    <button onclick="addTodo()">추가</button>
+                <div class="input-group">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: #495057; margin-left: 0.5rem;">연결할 위치:</label>
+                    <select id="parent-select">
+                        <option value="root">중심 웹사이트</option>
+                    </select>
+                    <input type="text" id="node-text" placeholder="새로운 생각을 입력하세요..." style="flex: 1;">
+                    <button onclick="addNode()">생각 이어 붙이기</button>
+                    <button onclick="resetMap()" style="background-color: #daddde; color: #333;">초기화</button>
                 </div>
-                <div class="list-container" id="todo-list"></div>
-            </div>
 
-            <div class="card">
-                <h2>📁 간단 자료 저장소</h2>
-                <textarea id="memo-input" rows="2" placeholder="저장할 링크나 아이디어를 적으세요..."></textarea>
-                <button onclick="addMemo()">메모 저장</button>
-                <div class="list-container" id="memo-list"></div>
-            </div>
-
-            <div class="card">
-                <h2>📊 분석 및 계산기</h2>
-                <div class="calc-inputs">
-                    <input type="number" id="calc-num1" placeholder="숫자 1">
-                    <input type="number" id="calc-num2" placeholder="숫자 2">
+                <div class="mindmap-wrapper" id="mindmap-wrapper">
+                    <canvas id="mindmap-canvas"></canvas>
+                    <div id="nodes-container"></div>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-                    <button onclick="calculate('+')">더하기 (+)</button>
-                    <button onclick="calculate('*')">곱하기 (×)</button>
-                </div>
-                <div class="calc-result" id="calc-result">0</div>
             </div>
-
         </div>
     </main>
 
     <script>
-        // 마인드맵 기능 추가
-        function setCenterNode() {
-            const val = document.getElementById('map-center-input').value;
-            if(!val.trim()) return;
-            const container = document.getElementById('mindmap-container');
-            container.innerHTML = `<div class="mindmap-node mindmap-center">📍 ${val}</div>`;
-            document.getElementById('map-center-input').value = '';
+        // 색상 팰럿 (보내주신 선명한 디자인 색상 반영)
+        const colors = ['#e65c23', '#7048e8', '#e64980', '#37b24d', '#fcc419', '#1098ad'];
+        const lightColors = ['#ffebd9', '#eebffa', '#ffdeeb', '#d3f9d8', '#fff3bf', '#e0f7fa'];
+
+        let mapData = {
+            id: "root",
+            text: "회사\n웹사이트",
+            level: 0,
+            children: []
+        };
+
+        // 노드 추적용 단일 리스트
+        let nodeList = [mapData];
+
+        const wrapper = document.getElementById('mindmap-wrapper');
+        const canvas = document.getElementById('mindmap-canvas');
+        const ctx = canvas.getContext('2d');
+        const nodesContainer = document.getElementById('nodes-container');
+
+        function resizeCanvas() {
+            canvas.width = wrapper.clientWidth;
+            canvas.height = wrapper.clientHeight;
+            updateLayout();
+        }
+        window.addEventListener('resize', resizeCanvas);
+        setTimeout(resizeCanvas, 150);
+
+        // 생각을 추가하는 함수
+        function addNode() {
+            const input = document.getElementById('node-text');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const parentId = document.getElementById('parent-select').value;
+            const parentNode = nodeList.find(n => n.id === parentId);
+
+            if (parentNode) {
+                const newId = "node_" + Date.now();
+                const newNode = {
+                    id: newId,
+                    text: text,
+                    level: parentNode.level + 1,
+                    colorIndex: parentNode.level === 0 ? parentNode.children.length % colors.length : parentNode.colorIndex,
+                    children: []
+                };
+
+                parentNode.children.push(newNode);
+                nodeList.push(newNode);
+                
+                // 선택창(Select) 업데이트
+                updateSelectOptions();
+                input.value = '';
+                updateLayout();
+            }
         }
 
-        function addSubNode() {
-            const val = document.getElementById('map-sub-input').value;
-            if(!val.trim()) return;
-            const container = document.getElementById('mindmap-container');
-            
-            const node = document.createElement('div');
-            node.className = 'mindmap-node';
-            node.innerText = `↳ ${val}`;
-            container.appendChild(node);
-            document.getElementById('map-sub-input').value = '';
+        function updateSelectOptions() {
+            const select = document.getElementById('parent-select');
+            select.innerHTML = '';
+            nodeList.forEach(n => {
+                if(n.level < 2) { // 2단계까지만 자식을 덧붙일 수 있도록 설정
+                    const opt = document.createElement('option');
+                    opt.value = n.id;
+                    opt.innerText = `${'—'.repeat(n.level)} ${n.text.replace('\n', ' ')}`;
+                    select.appendChild(opt);
+                }
+            });
+            select.value = nodeList[nodeList.length - 1].id; // 방금 추가한 항목이 자동으로 선택됨
         }
 
-        // 기존 기능들
-        function addTodo() {
-            const input = document.getElementById('todo-input');
-            if (!input.value.trim()) return;
-            const list = document.getElementById('todo-list');
-            const item = document.createElement('div');
-            item.className = 'list-item';
-            item.innerHTML = `<span>${input.value}</span><button onclick="this.parentElement.remove()">삭제</button>`;
-            list.appendChild(item);
-            input.value = '';
+        // 배치 자동 계산 알고리즘 (보내주신 좌우 분할 구조 형상화)
+        function updateLayout() {
+            nodesContainer.innerHTML = '';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+
+            // 0단계 중심 배치
+            mapData.x = cx;
+            mapData.y = cy;
+
+            // 1단계 배치 (좌측 / 우측 균등 분할)
+            const firstLvlCount = mapData.children.length;
+            mapData.children.forEach((node, idx) => {
+                const isLeft = idx % 2 === 0; // 홀수/짝수로 좌우 분배
+                const sideIdx = Math.floor(idx / 2);
+                const sideCount = Math.ceil(firstLvlCount / 2);
+
+                node.x = isLeft ? cx - 220 : cx + 220;
+                // 높이 간격 조정
+                node.y = cy + (sideIdx - (sideCount - 1) / 2) * 160;
+
+                // 2단계 배치 (해당 1단계 노드의 뒤쪽으로 정렬)
+                const secondLvlCount = node.children.length;
+                node.children.forEach((subNode, sIdx) => {
+                    subNode.x = isLeft ? node.x - 180 : node.x + 180;
+                    subNode.y = node.y + (sIdx - (secondLvlCount - 1) / 2) * 60;
+                });
+            });
+
+            // 선 먼저 그리기
+            drawConnections(mapData);
+            // 노드 UI 렌더링
+            renderNodes(mapData);
         }
 
-        function addMemo() {
-            const input = document.getElementById('memo-input');
-            if (!input.value.trim()) return;
-            const list = document.getElementById('memo-list');
-            const item = document.createElement('div');
-            item.className = 'list-item';
-            item.innerHTML = `<span>${input.value}</span><button onclick="this.parentElement.remove()">삭제</button>`;
-            list.insertBefore(item, list.firstChild);
-            input.value = '';
+        // 이미지 속 부드러운 연결선 그리기 (S자 곡선형 브랜치)
+        function drawConnections(node) {
+            node.children.forEach(child => {
+                ctx.beginPath();
+                ctx.moveTo(node.x, node.y);
+                
+                // 이미지 느낌의 꺾인 곡선 구현 (베지에 곡선 활용)
+                const cpX1 = node.x + (child.x - node.x) * 0.4;
+                const cpY1 = node.y;
+                const cpX2 = node.x + (child.x - node.x) * 0.6;
+                const cpY2 = child.y;
+
+                ctx.bezierCurveTo(cpX1, cpY1, cpX2, cpY2, child.x, child.y);
+                ctx.strokeStyle = child.level === 1 ? colors[child.colorIndex] : '#adb5bd';
+                ctx.lineWidth = child.level === 1 ? 3 : 1.5;
+                ctx.stroke();
+
+                drawConnections(child);
+            });
         }
 
-        function calculate(operator) {
-            const num1 = parseFloat(document.getElementById('calc-num1').value) || 0;
-            const num2 = parseFloat(document.getElementById('calc-num2').value) || 0;
-            let result = 0;
-            if (operator === '+') result = num1 + num2;
-            if (operator === '*') result = num1 * num2;
-            document.getElementById('calc-result').innerText = result.toLocaleString();
+        // 노드 상자 화면에 그리기
+        function renderNodes(node) {
+            const div = document.createElement('div');
+            div.className = `node node-lvl-${node.level}`;
+            div.style.left = `${node.x}px`;
+            div.style.top = `${node.y}px`;
+            div.innerHTML = node.text.replace('\n', '<br>');
+
+            // 색상 입히기
+            if (node.level === 1) {
+                div.style.backgroundColor = colors[node.colorIndex];
+            } else if (node.level === 2) {
+                div.style.backgroundColor = lightColors[node.colorIndex];
+                div.style.borderColor = colors[node.colorIndex];
+            }
+
+            nodesContainer.appendChild(div);
+            node.children.forEach(child => renderNodes(child));
+        }
+
+        function resetMap() {
+            mapData = { id: "root", text: "중심 생각", level: 0, children: [] };
+            nodeList = [mapData];
+            updateSelectOptions();
+            updateLayout();
         }
     </script>
 </body>
