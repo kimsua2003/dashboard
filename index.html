@@ -78,6 +78,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
+            position: relative;
         }
 
         header {
@@ -185,7 +186,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             text-align: center;
             min-width: 120px;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 5;
         }
 
         .node-lvl-0 {
@@ -218,3 +219,106 @@
     </style>
 </head>
 <body>
+
+    <sidebar>
+        <div class="logo">박준하의 웹사이트</div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">비주얼 마인드맵</a></li>
+                <li><a href="#">생각 정리함</a></li>
+                <li><a href="#">설정</a></li>
+            </ul>
+        </nav>
+    </sidebar>
+
+    <main>
+        <header>
+            <h1>💡 아이디어 마인드맵 빌더</h1>
+        </header>
+
+        <div class="dashboard-layout">
+            <div class="card">
+                <div class="input-group">
+                    <div class="input-row">
+                        <label style="font-size: 0.85rem; font-weight: 600; color: #495057; width: 85px;">중심 생각 수정:</label>
+                        <input type="text" id="root-text-input" placeholder="중심 단어를 변경하세요..." style="flex: 1;">
+                        <button onclick="updateRootText()" style="background-color: #334155;">중심 변경</button>
+                    </div>
+                    
+                    <div class="divider"></div>
+
+                    <div class="input-row">
+                        <label style="font-size: 0.85rem; font-weight: 600; color: #495057; width: 85px;">연결할 위치:</label>
+                        <select id="parent-select" style="width: 180px;">
+                            <option value="root">회사 웹사이트</option>
+                        </select>
+                        <input type="text" id="node-text" placeholder="새로운 가지 생각을 입력하세요..." style="flex: 1;">
+                        <button onclick="addNode()">생각 이어 붙이기</button>
+                        <button onclick="resetMap()" style="background-color: #daddde; color: #333;">전체 초기화</button>
+                    </div>
+                </div>
+
+                <div class="mindmap-wrapper" id="mindmap-wrapper">
+                    <canvas id="mindmap-canvas"></canvas>
+                    <div id="nodes-container"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const colors = ['#e65c23', '#7048e8', '#e64980', '#37b24d', '#fcc419', '#1098ad'];
+        const lightColors = ['#ffebd9', '#eebffa', '#ffdeeb', '#d3f9d8', '#fff3bf', '#e0f7fa'];
+
+        let mapData = {
+            id: "root",
+            text: "회사\n웹사이트",
+            level: 0,
+            children: []
+        };
+
+        let nodeList = [mapData];
+
+        const wrapper = document.getElementById('mindmap-wrapper');
+        const canvas = document.getElementById('mindmap-canvas');
+        const ctx = canvas.getContext('2d');
+        const nodesContainer = document.getElementById('nodes-container');
+
+        // 화면 크기 확보를 더 명학하게 세팅하여 흰 화면 현상 방지
+        function initAndResize() {
+            if (!wrapper) return;
+            canvas.width = wrapper.clientWidth || 800;
+            canvas.height = wrapper.clientHeight || 500;
+            updateLayout();
+        }
+        
+        window.addEventListener('resize', initAndResize);
+        window.addEventListener('load', initAndResize);
+        // 즉시 실행으로 딜레이 제거
+        setTimeout(initAndResize, 50);
+
+        function updateRootText() {
+            const input = document.getElementById('root-text-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            mapData.text = text.length > 5 ? text.substring(0, 5) + "\n" + text.substring(5) : text;
+            input.value = '';
+            updateSelectOptions();
+            updateLayout();
+        }
+
+        function addNode() {
+            const input = document.getElementById('node-text');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const parentId = document.getElementById('parent-select').value;
+            const parentNode = nodeList.find(n => n.id === parentId);
+
+            if (parentNode) {
+                const newId = "node_" + Date.now();
+                const newNode = {
+                    id: newId,
+                    text: text,
+                    level: parentNode.level + 1,
