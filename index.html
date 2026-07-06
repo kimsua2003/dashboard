@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Minimal Dashboard</title>
+    <style>
+        /* 기본 테마 세팅: 검정, 회색, 하양 위주 */
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --border-color: #2e2e2e;
+            --text-main: #ffffff;
+            --text-sub: #a0a0a0;
+            --accent-color: #ffffff;
+            --accent-hover: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 사이드바 디자인 */
+        sidebar {
+            width: 250px;
+            background-color: #0a0a0a;
+            border-right: 1px solid var(--border-color);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        sidebar .logo {
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        sidebar nav ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        sidebar nav a {
+            color: var(--text-sub);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        sidebar nav a:hover, sidebar nav a.active {
+            color: var(--text-main);
+        }
+
+        /* 메인 콘텐츠 영역 */
+        main {
+            flex: 1;
+            padding: 2.5rem;
+            overflow-y: auto;
+        }
+
+        header {
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-sub);
+            font-size: 0.9rem;
+        }
+
+        /* 그리드 레이아웃 (카드 배치) */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 11fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .card h2 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        /* 입력창 및 버튼 공통 스타일 */
+        input, textarea {
+            width: 100%;
+            background-color: #121212;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #555;
+        }
+
+        button {
+            background-color: var(--accent-color);
+            color: #000000;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* 리스트 스타일 (계획, 저장소용) */
+        .list-container {
+            max-height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .list-item {
+            background-color: #1a1a1a;
+            padding: 0.75rem;
+            border-radius: 4px;
+            border-left: 3px solid #555;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item button {
+            background: none;
+            color: var(--text-sub);
+            padding: 0;
+            font-size: 0.8rem;
+        }
+        .list-item button:hover {
+            color: #ff5555;
+            background: none;
+        }
+
+        /* 계산기 전용 스타일 */
+        .calc-inputs {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .calc-result {
+            margin-top: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+    <sidebar>
+        <div class="logo">MND_DASH</div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">대시보드</a></li>
+                <li><a href="#">마인드맵 (준비중)</a></li>
+                <li><a href="#">계획/설정</a></li>
+                <li><a href="#">자료저장</a></li>
+                <li><a href="#">분석/계산</a></li>
+            </ul>
+        </nav>
+    </sidebar>
+
+    <main>
+        <header>
+            <h1 id="welcome-msg">안녕하세요. 오늘의 생각을 정리해보세요.</h1>
+            <p>미니멀 블랙 테마의 개인 맞춤형 공간입니다.</p>
+        </header>
+
+        <div class="dashboard-grid">
+            
+            <div class="card">
+                <h2>🎯 계획 및 목표 설정</h2>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="text" id="todo-input" placeholder="오늘의 목표를 입력하세요...">
+                    <button onclick="addTodo()">추가</button>
+                </div>
+                <div class="list-container" id="todo-list">
+                    </div>
+            </div>
+
+            <div class="card">
+                <h2>📁 간단 자료 저장소</h2>
+                <textarea id="memo-input" rows="2" placeholder="저장할 링크나 아이디어를 적으세요..."></textarea>
+                <button onclick="addMemo()">메모 저장</button>
+                <div class="list-container" id="memo-list
